@@ -1,2 +1,82 @@
 ---
 # defaults file for aspects_varnish
+aspects_varnish_enabled: False
+
+# variables for custom SystemD service file
+aspects_varnish_service_file_enabled: False
+aspects_varnish_service_file:
+  listen_port: "8080"
+  management_host: "localhost"
+  management_port: "6082"
+  vcl_path: "/etc/varnish/default.vcl"
+  secret_path: "/etc/varnish/secret"
+  storage_backend_type: "default"
+  storage_backend_options: "256m"
+
+# "aspects_varnish_secret" should be set in an encrypted file
+
+# Variables for vcl file
+aspects_varnish_vcl_format_version: "vcl 4.0;"
+#aspects_varnish_vcl_backends: {}
+aspects_varnish_vcl_recv_section_enabled: False
+#aspects_varnish_vcl_recv_section: {}
+aspects_varnish_vcl_backend_response_section_enabled: False
+#aspects_varnish_vcl_backend_response_section: {}
+aspects_varnish_vcl_deliver_section_enabled: False
+#aspects_varnish_vcl_deliver_section: {}
+aspects_varnish_vcl_synth_section_enabled: False
+#aspects_varnish_vcl_synth_section: {}
+aspects_varnish_vcl_backend_error_section_enabled: False
+#aspects_varnish_vcl_backend_error_section: {}
+aspects_varnish_vcl_extra_section_enabled: False
+#aspects_varnish_vcl_extra_section: {}
+
+# aspects_packages related variables
+aspects_packages_packages:
+  varnish:
+    state: "present"
+    Ubuntu:
+      1604: "varnish"
+      1804: "varnish"
+    Debian:
+      9: "varnish"
+    CentOS:
+      7: "varnish"
+    OracleLinux:
+      7: "varnish"
+
+aspects_packages_add_repo_apt_repos:
+  varnish:
+    enabled: False
+    key_url: "https://packagecloud.io/varnishcache/varnish60lts/gpgkey"
+    repo: "deb https://packagecloud.io/varnishcache/varnish60lts/ubuntu/ {{ ansible_lsb.codename }} main"
+  varnish-src:
+    enabled: False
+    key_url: "https://packagecloud.io/varnishcache/varnish60lts/gpgkey"
+    repo: "deb-src https://packagecloud.io/varnishcache/varnish60lts/ubuntu/ {{ ansible_lsb.codename }} main"
+
+aspects_packages_add_repo_yum_repos:
+  varnish:
+    state: "present"
+    name: "varnishcache_varnish60lts"
+    description: "varnishcache_varnish60lts"
+    gpgkey: "https://packagecloud.io/varnishcache/varnish60lts/gpgkey"
+    baseurl: "https://packagecloud.io/varnishcache/varnish60lts/el/7/$basearch"
+    sslverify: "1"
+    repo_gpgcheck: "0"
+    gpgcheck: "0"
+    enabled: "no"
+    sslcacert: "/etc/pki/tls/certs/ca-bundle.crt"
+    metadata_expire: "300"
+  varnish-source:
+    state: "present"
+    name: "varnishcache_varnish60lts-source"
+    description: "varnishcache_varnish60lts-source"
+    gpgkey: "https://packagecloud.io/varnishcache/varnish60lts/gpgkey"
+    baseurl: "https://packagecloud.io/varnishcache/varnish60lts/el/7/SRPMS"
+    sslverify: "1"
+    repo_gpgcheck: "0"
+    gpgcheck: "0"
+    enabled: "no"
+    sslcacert: "/etc/pki/tls/certs/ca-bundle.crt"
+    metadata_expire: "300"

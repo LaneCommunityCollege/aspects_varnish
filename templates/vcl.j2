@@ -1,0 +1,96 @@
+# {{ ansible_managed }}
+{{ aspects_varnish_vcl_format_version }}
+
+{% for import in aspects_varnish_vcl_imports|default([]) %}
+{{ import }}
+{% endfor %}
+
+### Start configuring backends ###
+{% for backend in aspects_varnish_vcl_backends|default({})|sort %}
+{% if aspects_varnish_vcl_backends[backend].enabled == True or aspects_varnish_vcl_backends[backend].enabled == "True" %}
+{{ aspects_varnish_vcl_backends[backend].block }}
+{% endif %}
+{% endfor %}
+### End configuring backends ###
+
+{% if aspects_varnish_vcl_recv_section_enabled %}
+### Start configuring recv ###
+sub vcl_recv {
+    # Happens before we check if we have this in cache already.
+    #
+    # Typically you clean up the request here, removing cookies you don't need,
+    # rewriting the request, etc.
+    {% for config in aspects_varnish_vcl_recv_section|sort %}
+    {% if aspects_varnish_vcl_recv_section[config].enabled %}
+    {{ aspects_varnish_vcl_recv_section[config].block }}
+    {% endif %}
+    {% endfor %}
+}
+### End configuring recv ###
+{% endif %}
+
+{% if aspects_varnish_vcl_backend_response_section_enabled %}
+### Start configuring backend_response ###
+sub vcl_backend_response {
+    # Happens after we have read the response headers from the backend.
+    #
+    # Here you clean the response headers, removing silly Set-Cookie headers
+    # and other mistakes your backend does.
+    {% for config in aspects_varnish_vcl_backend_response_section|sort %}
+    {% if aspects_varnish_vcl_backend_response_section[config].enabled %}
+    {{ aspects_varnish_vcl_backend_response_section[config].block }}
+    {% endif %}
+    {% endfor %}
+}
+### End configuring backend_response ###
+{% endif %}
+
+{% if aspects_varnish_vcl_deliver_section_enabled %}
+### Start configuring deliver ###
+sub vcl_deliver {
+    # Happens when we have all the pieces we need, and are about to send the
+    # response to the client.
+    #
+    # You can do accounting or modifying the final object here.
+    {% for config in aspects_varnish_vcl_deliver_section|sort %}
+    {% if aspects_varnish_vcl_deliver_section[config].enabled %}
+    {{ aspects_varnish_vcl_deliver_section[config].block }}
+    {% endif %}
+    {% endfor %}
+}
+### End configuring deliver ###
+{% endif %}
+
+{% if aspects_varnish_vcl_synth_section_enabled %}
+### Start configuring synth ###
+sub vcl_synth {
+    {% for config in aspects_varnish_vcl_synth_section|sort %}
+    {% if aspects_varnish_vcl_synth_section[config].enabled %}
+    {{ aspects_varnish_vcl_synth_section[config].block }}
+    {% endif %}
+    {% endfor %}
+}
+### End configuring synth ###
+{% endif %}
+
+{% if aspects_varnish_vcl_backend_error_section_enabled %}
+### Start configuring backend_error ###
+sub vcl_backend_error {
+    {% for config in aspects_varnish_vcl_backend_error_section|sort %}
+    {% if aspects_varnish_vcl_backend_error_section[config].enabled %}
+    {{ aspects_varnish_vcl_backend_error_section[config].block }}
+    {% endif %}
+    {% endfor %}
+}
+### End configuring backend_error ###
+{% endif %}
+
+{% if aspects_varnish_vcl_extra_section_enabled %}
+### Start configuring extra blocks ###
+{% for config in aspects_varnish_vcl_extra_section|sort %}
+{% if aspects_varnish_vcl_extra_section[config].enabled %}
+{{ aspects_varnish_vcl_extra_section[config].block }}
+{% endif %}
+{% endfor %}
+### End configuring extra blocks ###
+{% endif %}

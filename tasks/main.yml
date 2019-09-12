@@ -1,2 +1,6 @@
 ---
-# tasks file for aspects_varnish
+- name: Include aspects_varnish tasks
+  when: aspects_varnish_enabled
+  include_tasks: init.yml
+  tags:
+    - aspects_varnish

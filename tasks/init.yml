@@ -1,0 +1,49 @@
+---
+- name: "Make sure /etc/systemd/system/varnish.service.d is a directory"
+  when: aspects_varnish_service_file_enabled
+  file:
+    state: "directory"
+    path: "/etc/systemd/system/varnish.service.d"
+    mode: "0755"
+    owner: 0
+    group: 0
+  tags:
+    - aspects_varnish
+
+- name: "Template /etc/systemd/system/varnish.service.d/custom.conf"
+  when: aspects_varnish_service_file_enabled
+  template:
+    src: "etc-systemd-system-varnish.service.d-custom.conf.j2"
+    dest: "/etc/systemd/system/varnish.service.d/custom.conf"
+    mode: "644"
+    owner: 0
+    group: 0
+  notify:
+    - reload systemctl daemon
+    - restart varnish
+  tags:
+    - aspects_varnish
+
+- name: "Template /etc/varnish/secret"
+  when: aspects_varnish_secret is defined
+  no_log: True
+  template:
+    src: "etc-varnish-secret.j2"
+    dest: "/etc/varnish/secret"
+    mode: "644"
+    owner: 0
+    group: 0
+  notify: reload varnish
+  tags:
+    - aspects_varnish
+
+- name: "Template /etc/varnish/default.vcl"
+  template:
+    src: "vcl.j2"
+    dest: "/etc/varnish/default.vcl"
+    mode: "644"
+    owner: 0
+    group: 0
+  notify: reload varnish
+  tags:
+    - aspects_varnish

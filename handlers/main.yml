@@ -1,2 +1,38 @@
 ---
 # handlers file for aspects_varnish
+- name: reload systemctl daemon
+  systemd:
+    daemon_reload: yes
+  tags:
+    - aspects_varnish
+
+- name: restart varnish
+  service:
+    name: varnish
+    state: restarted
+    enabled: yes
+  tags:
+    - aspects_varnish
+
+- name: reload varnish
+  service:
+    name: varnish
+    state: reloaded
+    enabled: yes
+  tags:
+    - aspects_varnish
+
+- name: start varnish
+  service:
+    name: varnish
+    state: started
+    enabled: yes
+  tags:
+    - aspects_varnish
+
+- name: stop varnish
+  service:
+    name: varnish
+    state: stopped
+  tags:
+    - aspects_varnish

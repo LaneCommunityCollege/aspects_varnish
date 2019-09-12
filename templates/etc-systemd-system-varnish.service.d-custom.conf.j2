@@ -1,0 +1,9 @@
+# {{ ansible_managed }}
+[Service]
+ExecStart=
+ExecStart=/usr/sbin/varnishd \
+          -a {{ aspects_varnish_service_file.listen_address|default("") }}:{{ aspects_varnish_service_file.listen_port }} \
+          -T {{ aspects_varnish_service_file.management_host }}:{{ aspects_varnish_service_file.management_port }} \
+          -f {{ aspects_varnish_service_file.vcl_path }} \
+          -S {{ aspects_varnish_service_file.secret_path|default("none") }} \
+          -s {{ aspects_varnish_service_file.storage_backend_type }},{{ aspects_varnish_service_file.storage_backend_options }}

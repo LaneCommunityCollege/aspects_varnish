@@ -45,38 +45,3 @@ aspects_packages_packages:
     OracleLinux:
       7: "varnish"
 
-aspects_packages_add_repo_apt_repos:
-  varnish:
-    enabled: False
-    key_url: "https://packagecloud.io/varnishcache/varnish60lts/gpgkey"
-    repo: "deb https://packagecloud.io/varnishcache/varnish60lts/ubuntu/ {{ ansible_lsb.codename }} main"
-  varnish-src:
-    enabled: False
-    key_url: "https://packagecloud.io/varnishcache/varnish60lts/gpgkey"
-    repo: "deb-src https://packagecloud.io/varnishcache/varnish60lts/ubuntu/ {{ ansible_lsb.codename }} main"
-
-aspects_packages_add_repo_yum_repos:
-  varnish:
-    state: "present"
-    name: "varnishcache_varnish60lts"
-    description: "varnishcache_varnish60lts"
-    gpgkey: "https://packagecloud.io/varnishcache/varnish60lts/gpgkey"
-    baseurl: "https://packagecloud.io/varnishcache/varnish60lts/el/7/$basearch"
-    sslverify: "1"
-    repo_gpgcheck: "0"
-    gpgcheck: "0"
-    enabled: "no"
-    sslcacert: "/etc/pki/tls/certs/ca-bundle.crt"
-    metadata_expire: "300"
-  varnish-source:
-    state: "present"
-    name: "varnishcache_varnish60lts-source"
-    description: "varnishcache_varnish60lts-source"
-    gpgkey: "https://packagecloud.io/varnishcache/varnish60lts/gpgkey"
-    baseurl: "https://packagecloud.io/varnishcache/varnish60lts/el/7/SRPMS"
-    sslverify: "1"
-    repo_gpgcheck: "0"
-    gpgcheck: "0"
-    enabled: "no"
-    sslcacert: "/etc/pki/tls/certs/ca-bundle.crt"
-    metadata_expire: "300"

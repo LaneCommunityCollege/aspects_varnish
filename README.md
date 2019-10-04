@@ -8,32 +8,48 @@ Set ```hash_behaviour=merge``` in your ansible.cfg file.
 # Setup
 If you chose not to use `aspects_packages`, you will need to install `varnish` before running this role.
 ## Use `aspects_packages` to install apt repos
-The Varnish 6.0 apt repo is configured in [defaults/main.yml](defaults/main.yml). So all you need to do
-in order to enable the apt repo is set the following in your variables:
+### Configure Varnish repo
+You can configure the official Varnish package repositories for apt and yum via aspects_packages. 
+Just add the appropriate dictionary configuration to group_var or host_vars.
 
+For example, the Varnish 6.0 repos would look like:
 ```yaml
-aspects_packages_enabled: True
 aspects_packages_add_repo_apt_repos:
   varnish:
     enabled: True
+    key_url: "https://packagecloud.io/varnishcache/varnish60lts/gpgkey"
+    repo: "deb https://packagecloud.io/varnishcache/varnish60lts/ubuntu/ {{ ansible_lsb.codename }} main"
   varnish-src:
     enabled: True
-```
-## Use `aspects_packages` to install yum repos
-The Varnish 6.0 yum repo is configured in [defaults/main.yml](defaults/main.yml). So all you need to do
-in order to enable the yum repo is set the following in your variables:
+    key_url: "https://packagecloud.io/varnishcache/varnish60lts/gpgkey"
+    repo: "deb-src https://packagecloud.io/varnishcache/varnish60lts/ubuntu/ {{ ansible_lsb.codename }} main"
 
-```yaml
-aspects_packages_enabled: True
 aspects_packages_add_repo_yum_repos:
   varnish:
+    state: "present"
+    name: "varnishcache_varnish60lts"
+    description: "varnishcache_varnish60lts"
+    gpgkey: "https://packagecloud.io/varnishcache/varnish60lts/gpgkey"
+    baseurl: "https://packagecloud.io/varnishcache/varnish60lts/el/7/$basearch"
+    sslverify: "1"
+    repo_gpgcheck: "0"
+    gpgcheck: "0"
     enabled: "yes"
-  varnish-src:
+    sslcacert: "/etc/pki/tls/certs/ca-bundle.crt"
+    metadata_expire: "300"
+  varnishsource:
+    state: "present"
+    name: "varnishcache_varnish60lts-source"
+    description: "varnishcache_varnish60lts-source"
+    gpgkey: "https://packagecloud.io/varnishcache/varnish60lts/gpgkey"
+    baseurl: "https://packagecloud.io/varnishcache/varnish60lts/el/7/SRPMS"
+    sslverify: "1"
+    repo_gpgcheck: "0"
+    gpgcheck: "0"
     enabled: "yes"
+    sslcacert: "/etc/pki/tls/certs/ca-bundle.crt"
+    metadata_expire: "300"
 ```
-
-> Note: If you are using `aspects_packages` and don't want to use the varnish yum repo, the repo file will still be created
->in `/etc/yum.repos.d/`. But the "enabled" key will be 0, so yum will not use the repo.
 
 # Role Variables
 ### `aspects_varnish_enabled`

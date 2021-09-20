@@ -47,3 +47,6 @@ aspects_packages_packages:
     OracleLinux:
       7: "varnish"
 
+
+aspects_varnish_varnishnca_execstart: |
+  /usr/bin/varnishncsa -a -w /var/log/varnish/varnishncsa.log -D

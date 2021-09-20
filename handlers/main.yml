@@ -36,3 +36,35 @@
     state: stopped
   tags:
     - aspects_varnish
+
+- name: start varnishncsa
+  service:
+    name: varnishncsa
+    state: started
+    enabled: yes
+  tags:
+    - aspects_varnish
+
+- name: stop varnishncsa
+  service:
+    name: varnishncsa
+    state: stopped
+    enabled: no
+  tags:
+    - aspects_varnish
+
+- name: restart varnishncsa
+  service:
+    name: varnishncsa
+    state: restarted
+    enabled: yes
+  tags:
+    - aspects_varnish
+
+- name: reload varnishncsa
+  service:
+    name: varnishncsa
+    state: reloaded
+    enabled: yes
+  tags:
+    - aspects_varnish

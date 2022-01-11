@@ -36,11 +36,9 @@ aspects_packages_packages:
   varnish:
     state: "present"
     Ubuntu:
-      1604: "varnish"
       1804: "varnish"
       2004: "varnish"
     Debian:
-      9: "varnish"
       10: "varnish"
     CentOS:
       7: "varnish"

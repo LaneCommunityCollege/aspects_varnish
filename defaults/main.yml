@@ -38,6 +38,7 @@ aspects_packages_packages:
     Ubuntu:
       1804: "varnish"
       2004: "varnish"
+      2204: "varnish"
     Debian:
       10: "varnish"
     CentOS:
